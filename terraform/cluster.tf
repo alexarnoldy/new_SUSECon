@@ -22,7 +22,8 @@ resource "libvirt_volume" "img" {
 
 provider "dns" {
   update {
-    server        = "172.16.250.2"
+#    server        = "172.16.250.2"
+    server        = "10.110.0.1"
   }
 }
 
