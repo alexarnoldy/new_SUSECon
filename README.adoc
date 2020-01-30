@@ -17,6 +17,13 @@
 * *DONE* Remove load balancer
 
 * Test deploying onto multiple KVM hosts
+----
+terraform apply -state=state/infra1.tfstate -var libvirt_uri="qemu+ssh://admin@infra1.susecon.local/system"
+terraform apply -state=state/infra2.tfstate -var libvirt_uri="qemu+ssh://admin@infra2.susecon.local/system"
+terraform apply -state=state/infra3.tfstate -var libvirt_uri="qemu+ssh://admin@infra3.susecon.local/system"
+terraform apply -state=state/infra4.tfstate -var libvirt_uri="qemu+ssh://admin@infra4.susecon.local/system"
+----
+
 
 * Find way to do nested deployments
 
