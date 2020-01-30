@@ -13,6 +13,7 @@
 * *DONE* Remove load balancer
 
 * Test deploying onto multiple KVM hosts
+** Run ssh-agent and ensure you have passwordless ssh and sudo on the target host
 ----
 terraform apply -state=state/infra1.tfstate -var libvirt_uri="qemu+ssh://admin@infra1.susecon.local/system"
 terraform apply -state=state/infra2.tfstate -var libvirt_uri="qemu+ssh://admin@infra2.susecon.local/system"
