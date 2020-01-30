@@ -1,13 +1,9 @@
 === Todo:
 
-* Create key pair for the admin node to use in the deployment
-** *CONCERN* Biggest problem is getting the public key for the student host, to populate each nodes' authorized_keys file 
-** Likely for the admin node
-*** Need to be able to specify public key to add to authorized_keys
-** Possibly easier to generate them into the .terraform directory then use the file provisioner to copy in
-** Can also start with a static set of keys for the nodes
+* *DONE* Create key pair for the admin node to use in the deployment
+** *CONCERN* Biggest problem is getting the public key for the student host, to populate each cluster nodes' authorized_keys file 
 ** Instructor host needs to have the public keys of all student hosts
-*** Then can create an authorized keys file for each deployment containing:
+*** The authorized keys file for each deployment will contain:
 **** Instructor host
 **** Student host
 **** Admin node
@@ -25,10 +21,13 @@ terraform apply -state=state/infra4.tfstate -var libvirt_uri="qemu+ssh://admin@i
 ----
 
 
-* Find way to do nested deployments
+*  Love to be able to do nested deployments
 
 * Deploy a single deployment across multiple KVM hosts (providers)
 ** https://www.terraform.io/docs/configuration/providers.html#alias-multiple-provider-instances
+
+* Need to work out a way to snapshot all environments after they've been deployed
+** Also need a programatic way to rollback one or all environments
 
 
 
