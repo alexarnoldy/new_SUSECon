@@ -4,8 +4,9 @@
 
 
 provider "libvirt" {
-  uri = "qemu:///system"
-#  uri = "qemu+ssh://admin@infra1.caaspv4.com/system"
+#  uri = var.libvirt_uri
+#  uri = "qemu:///system"
+  uri = "qemu+ssh://${var.libvirt_host}/system"
 }
 
 # This is the CaaSP kvm image that has been created by IBS

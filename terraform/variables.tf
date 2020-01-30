@@ -2,10 +2,15 @@
 # libvirt variables #
 #####################
 
-variable "libvirt_uri" {
-  default     = "qemu:///system"
-  description = "libvirt connection url - default to localhost"
+variable "libvirt_host" {
+  default     = "infra2"
+  description = "KVM host on which to deploy a cluster"
 }
+
+#variable "libvirt_uri" {
+#  default     = "qemu+ssh://${var.libvirt_host}/system"
+#  description = "libvirt connection url - change default in variable libvirt_host"
+#}
 
 variable "pool" {
   default     = "default"
