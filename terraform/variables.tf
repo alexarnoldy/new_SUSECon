@@ -7,10 +7,10 @@ variable "libvirt_host" {
   description = "KVM host on which to deploy a cluster"
 }
 
-#variable "libvirt_uri" {
-#  default     = "qemu+ssh://${var.libvirt_host}/system"
+variable "libvirt_uri" {
+  default     = "qemu+ssh://infra2/system"
 #  description = "libvirt connection url - change default in variable libvirt_host"
-#}
+}
 
 variable "pool" {
   default     = "default"
@@ -25,7 +25,8 @@ variable "pool" {
 variable "img_source_url" {
 #  type    = string
 #  default = "SLES15-SP1-JeOS.x86_64-15.1-OpenStack-Cloud-GMC3.qcow2"
-  default = "SLES15-SP1-JeOS.x86_64-15.1-OpenStack-Cloud-GM.qcow2"
+#  default = "SLES15-SP1-JeOS.x86_64-15.1-OpenStack-Cloud-GM.qcow2"
+  default = "SLES15-SP1-JeOS.x86_64-15.1-OpenStack-Cloud-QU2.qcow2"
 }
 
 variable "repositories" {

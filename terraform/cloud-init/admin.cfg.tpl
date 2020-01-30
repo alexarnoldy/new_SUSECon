@@ -74,13 +74,13 @@ ${register_scc}
   - SUSEConnect --url http://rmt.suse.hpc.local
   - SUSEConnect -p sle-module-containers/15.1/x86_64
   - SUSEConnect -p caasp/4.0/x86_64 --url http://rmt.suse.hpc.local
-#  - zypper --non-interactive install -t pattern SUSE-CaaSP-Management
-#  - zypper --non-interactive update
+  - zypper --non-interactive install -t pattern SUSE-CaaSP-Management
+  - zypper --non-interactive update
   - chown -R sles:users /home/sles
 #  - sleep 180
 #  - sudo -H -u sles bash /tmp/deploy_caasp.sh
 #  - sleep 120
-#  - reboot
+  - reboot
 
 bootcmd:
   - ip link set dev eth0 mtu 1400
