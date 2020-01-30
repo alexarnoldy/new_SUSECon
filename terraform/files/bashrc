@@ -1,0 +1,6 @@
+set -o vi
+alias kgn="kubectl get nodes -o wide"
+alias kgd="kubectl get deployments -o wide"
+alias kgp="kubectl get pods -o wide"
+alias kgpa="kubectl get pods -o wide --all-namespaces"
+alias kaf="kubectl apply -f"

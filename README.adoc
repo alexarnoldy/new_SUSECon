@@ -1,0 +1,31 @@
+=== Todo:
+
+* Create key pair for the admin node to use in the deployment
+** *CONCERN* Biggest problem is getting the public key for the student host, to populate each nodes' authorized_keys file 
+** Likely for the admin node
+*** Need to be able to specify public key to add to authorized_keys
+** Possibly easier to generate them into the .terraform directory then use the file provisioner to copy in
+** Can also start with a static set of keys for the nodes
+** Instructor host needs to have the public keys of all student hosts
+*** Then can create an authorized keys file for each deployment containing:
+**** Instructor host
+**** Student host
+**** Admin node
+
+* *DONE* Copy .all_nodes and ssh_config files to the admin node
+
+* *DONE* Remove load balancer
+
+* Test deploying onto multiple KVM hosts
+
+* Find way to do nested deployments
+
+* Deploy a single deployment across multiple KVM hosts (providers)
+** https://www.terraform.io/docs/configuration/providers.html#alias-multiple-provider-instances
+
+
+
+
+
+// vim: set syntax=asciidoc:
+
