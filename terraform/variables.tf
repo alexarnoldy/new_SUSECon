@@ -41,15 +41,13 @@ variable "repositories" {
   description = "Urls of the repositories to mount via cloud-init"
 }
 
-variable "caasp_registry_code" {
-  default     = "INTERNAL-USE-ONLY-e62a127779ce75cc"
-  description = "TBD"
-}
+#variable "caasp_registry_code" {
+#  description = "TBD"
+#}
 
-variable "sle_registry_code" {
-  default     = "INTERNAL-USE-ONLY-5f03b309b9b3a613"
-  description = "TBD"
-}
+#variable "sle_registry_code" {
+#  description = "TBD"
+#}
 
 variable "admin_memory" {
   default     = 4096

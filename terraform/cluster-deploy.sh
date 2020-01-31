@@ -28,8 +28,9 @@ read -p "space separated list (i.e. 1 3), or range (i.e. 2..4): " HOSTS
 case $HOSTS in
 	*..*)
 		eval '
-		for EACH in {'"$HOSTS"'}; do
-			cd ${TF_DIR}; terraform ${ACTION} -state=${STATE_DIR}/${QEMU_HOST_PREFIX}${EACH}.tfstate -var libvirt_uri="qemu+ssh://${QEMU_USER}@${QEMU_HOST_PREFIX}${EACH}.${DOMAIN}/system"
+		for EACH in {'"$HOSTS"'}; do 
+			cd ${TF_DIR}; terraform show ${STATE_DIR}/${QEMU_HOST_PREFIX}${EACH}.tfstate | wc -l
+			terraform ${ACTION} -state=${STATE_DIR}/${QEMU_HOST_PREFIX}${EACH}.tfstate -var libvirt_uri="qemu+ssh://${QEMU_USER}@${QEMU_HOST_PREFIX}${EACH}.${DOMAIN}/system"
 		done
 		'
 		;;
