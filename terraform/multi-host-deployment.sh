@@ -10,9 +10,11 @@ STATE_DIR=/home/admin/new_SUSECon/terraform/state
 QEMU_USER=admin
 QEMU_HOST_PREFIX=infra
 DOMAIN=susecon.local
+echo ""
 echo "***IMPORTANT*** This script does not know the number of hosts you have"
-echo "in your environment. Calling on the wrong hosts, too many hosts, or"
-echo "hosts that don't exist will cause various kinds of errors and/or headaches."
+echo "in your environment. Calling on the wrong hosts, too many hosts, "
+echo "already deployed hosts, or hosts that don't exist can result in anything"
+echo "from errors, to headaches, to an urgent need to update to one's resume"
 echo ""
 echo "Enter the host numbers for deployment in formats of single number (i.e. 1),"
 #read -p "comma separated list (i.e. 1,3), or range (i.e. 2..4): " HOSTS
