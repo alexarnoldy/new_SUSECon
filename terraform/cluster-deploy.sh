@@ -3,7 +3,7 @@
 ## Script to deploy CaaSP clusters via Terraform across a set group of KVM hosts
 
 ###
-Variables
+#Variables
 ###
 TF_DIR=/home/admin/new_SUSECon/terraform
 STATE_DIR=/home/admin/new_SUSECon/terraform/state
@@ -25,20 +25,36 @@ echo ""
 echo "Enter the host numbers for deployment in formats of single number (i.e. 1),"
 read -p "space separated list (i.e. 1 3), or range (i.e. 2..4): " HOSTS
 
+#case $HOSTS in
+#	*..*)
+##		[ $ACTION = destroy ] || func_terraform_check_state () 
+#		eval '
+#		for EACH in {'"$HOSTS"'}; do 
+#			func_terraform_action ()
+#		done
+#		'
+#		;;
+#	*)
+#		for EACH in $(echo ${HOSTS})
+#		do
+#			func_terraform_action ()
+#		done
+#		;;
+#esac
+
 case $HOSTS in
 	*..*)
-		[ $ACTION = destroy ] || func_terraform_check_state () 
 		eval '
-		for EACH in {'"$HOSTS"'}
-		do 
-			func_terraform_action ()
+		for EACH in {'"$HOSTS"'}; do
+			cd ${TF_DIR}; terraform show ${STATE_DIR}/${QEMU_HOST_PREFIX}${EACH}.tfstate | wc -l
+			terraform ${ACTION} -state=${STATE_DIR}/${QEMU_HOST_PREFIX}${EACH}.tfstate -var libvirt_uri="qemu+ssh://${QEMU_USER}@${QEMU_HOST_PREFIX}${EACH}.${DOMAIN}/system"
 		done
 		'
 		;;
 	*)
 		for EACH in $(echo ${HOSTS})
 		do
-			func_terraform_action ()
+			cd ${TF_DIR}; terraform ${ACTION} -state=${STATE_DIR}/${QEMU_HOST_PREFIX}${EACH}.tfstate -var libvirt_uri="qemu+ssh://${QEMU_USER}@${QEMU_HOST_PREFIX}${EACH}.${DOMAIN}/system"
 		done
 		;;
 esac
