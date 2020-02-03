@@ -46,17 +46,25 @@ resource "libvirt_network" "network" {
   }
 }
 
+resource "libvirt_network" "lan_network" {
+  name = "br241"
+  mode = "bridge"
+  bridge = "br241"
+#  domain = "caaspv4.net"
+#  addresses = ["172.16.241.0/24"]
+}
+
 ################
 # Registration #
 ################
-data "template_file" "register_scc" {
-  template = file("cloud-init/register-scc.tpl")
-  count    = var.caasp_registry_code == "" ? 0 : 1
-  vars = {
-    sle_registry_code   = var.sle_registry_code
-    caasp_registry_code = var.caasp_registry_code
-  }
-}
+#data "template_file" "register_scc" {
+#  template = file("cloud-init/register-scc.tpl")
+#  count    = var.caasp_registry_code == "" ? 0 : 1
+#  vars = {
+#    sle_registry_code   = var.sle_registry_code
+#    caasp_registry_code = var.caasp_registry_code
+#  }
+#}
 
 
 #####################
