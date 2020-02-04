@@ -366,7 +366,8 @@ data "template_file" "global_worker_cloud_init_user_data" {
   template = file("global-cluster-cloud-init/global_worker.cfg.tpl")
 
   vars = {
-    fqdn            = "${var.name_prefix}global_worker.${var.name_prefix}${var.domain_name}"
+#    fqdn            = "${var.name_prefix}global_worker.${var.name_prefix}${var.domain_name}"
+    fqdn            = "${var.name_prefix}global_worker${var.libvirt_host_number}.${var.name_prefix}${var.domain_name}"
     authorized_keys = join("\n", formatlist("  - %s", var.authorized_keys))
 #repositories    = join("\n", data.template_file.zypper_repositories.*.rendered)
     repositories = ""
@@ -390,7 +391,7 @@ resource "libvirt_cloudinit_disk" "global_worker" {
 }
 
 resource "libvirt_domain" "global_worker" {
-  name       = "${var.name_prefix}global_worker"
+  name       = "${var.name_prefix}global_worker${var.libvirt_host_number}"
   memory     = var.global_worker_memory
   vcpu       = var.global_worker_vcpu
   cloudinit  = libvirt_cloudinit_disk.global_worker.id
