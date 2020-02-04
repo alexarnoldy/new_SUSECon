@@ -386,7 +386,7 @@ resource "libvirt_cloudinit_disk" "global_worker" {
   name  = "${var.name_prefix}global_worker_cloud_init.iso"
   pool  = var.pool
   user_data = data.template_file.global_worker_cloud_init_user_data.rendered
-  network_config = file("global-cluster-cloud-init/network.cfg")
+  network_config = file("global-cluster-cloud-init/network-${var.libvirt_host_number}.cfg")
 }
 
 resource "libvirt_domain" "global_worker" {
