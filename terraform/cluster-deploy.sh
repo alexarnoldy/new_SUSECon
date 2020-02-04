@@ -46,15 +46,23 @@ case $HOSTS in
 	*..*)
 		eval '
 		for EACH in {'"$HOSTS"'}; do
-			cd ${TF_DIR}; terraform show ${STATE_DIR}/${QEMU_HOST_PREFIX}${EACH}.tfstate | wc -l
-			terraform ${ACTION} -state=${STATE_DIR}/${QEMU_HOST_PREFIX}${EACH}.tfstate -var libvirt_uri="qemu+ssh://${QEMU_USER}@${QEMU_HOST_PREFIX}${EACH}.${DOMAIN}/system"
+#			cd ${TF_DIR}; terraform show ${STATE_DIR}/${QEMU_HOST_PREFIX}${EACH}.tfstate | wc -l
+#			terraform ${ACTION} -state=${STATE_DIR}/${QEMU_HOST_PREFIX}${EACH}.tfstate -var libvirt_uri="qemu+ssh://${QEMU_USER}@${QEMU_HOST_PREFIX}${EACH}.${DOMAIN}/system"
+			## Update the IP address for the node to 240 + the KVM host "libvirt_host_number" and create the new network-*.cfg file
+			IPADDR=$(echo $((240+${EACH})))
+			sed "s/XYZ/${IPADDR}/" global-cluster-cloud-init/network.cfg > global-cluster-cloud-init/network-${EACH}.cfg
+			cd ${TF_DIR}; terraform ${ACTION} -state=${STATE_DIR}/${QEMU_HOST_PREFIX}${EACH}.tfstate -var libvirt_host_number=${EACH}
 		done
 		'
 		;;
 	*)
 		for EACH in $(echo ${HOSTS})
 		do
-			cd ${TF_DIR}; terraform ${ACTION} -state=${STATE_DIR}/${QEMU_HOST_PREFIX}${EACH}.tfstate -var libvirt_uri="qemu+ssh://${QEMU_USER}@${QEMU_HOST_PREFIX}${EACH}.${DOMAIN}/system"
+#			cd ${TF_DIR}; terraform ${ACTION} -state=${STATE_DIR}/${QEMU_HOST_PREFIX}${EACH}.tfstate -var libvirt_uri="qemu+ssh://${QEMU_USER}@${QEMU_HOST_PREFIX}${EACH}.${DOMAIN}/system"
+			## Update the IP address for the node to 240 + the KVM host "libvirt_host_number" and create the new network-*.cfg file
+			IPADDR=$(echo $((240+${EACH})))
+			sed "s/XYZ/${IPADDR}/" global-cluster-cloud-init/network.cfg > global-cluster-cloud-init/network-${EACH}.cfg
+			cd ${TF_DIR}; terraform ${ACTION} -state=${STATE_DIR}/${QEMU_HOST_PREFIX}${EACH}.tfstate -var libvirt_host_number=${EACH}
 		done
 		;;
 esac
