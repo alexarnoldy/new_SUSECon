@@ -4,9 +4,9 @@
 
 
 provider "libvirt" {
-  uri = var.libvirt_uri
+#  uri = var.libvirt_uri
 #  uri = "qemu:///system"
-#  uri = "qemu+ssh://${var.libvirt_host}/system"
+  uri = "qemu+ssh://${var.libvirt_host_base}${var.libvirt_host_number}/system"
 }
 
 # This is the CaaSP kvm image that has been created by IBS
@@ -46,13 +46,13 @@ resource "libvirt_network" "network" {
   }
 }
 
-resource "libvirt_network" "lan_network" {
-  name = "br241"
-  mode = "bridge"
-  bridge = "br241"
+#resource "libvirt_network" "lan_network" {
+#  name = "br241"
+#  mode = "bridge"
+#  bridge = "br241"
 #  domain = "caaspv4.net"
-#  addresses = ["172.16.241.0/24"]
-}
+#  addresses = ["172.16.240.0/24"]
+#}
 
 ################
 # Registration #
@@ -338,3 +338,101 @@ resource "libvirt_domain" "worker" {
 output "workers" {
   value = [libvirt_domain.worker.*.network_interface.0.addresses.0]
 }
+
+###########################
+### Global Cluster worker #
+###########################
+
+#data "template_file" "zypper_repositories" {
+#  template = file("cloud-init/repository.tpl")
+#  count    = length(var.repositories)
+  #  vars {
+  #    repository_url  = "${element(values(var.repositories[count.index]), 0)}"
+  #    repository_name = "${element(keys(var.repositories[count.index]), 0)}"
+  #  }
+#}
+
+resource "libvirt_volume" "global_worker" {
+  name           = "${var.name_prefix}global_worker.qcow2"
+  pool           = var.pool
+  size           = var.disk_size
+  base_volume_id = libvirt_volume.img.id
+#  count          = 1
+}
+
+data "template_file" "global_worker_cloud_init_user_data" {
+  # needed when 0 global_worker nodes are defined
+#  count    = var.global_worker_count
+  template = file("global-cluster-cloud-init/global_worker.cfg.tpl")
+
+  vars = {
+    fqdn            = "${var.name_prefix}global_worker.${var.name_prefix}${var.domain_name}"
+    authorized_keys = join("\n", formatlist("  - %s", var.authorized_keys))
+#repositories    = join("\n", data.template_file.zypper_repositories.*.rendered)
+    repositories = ""
+#    register_scc    = join("\n", data.template_file.register_scc.*.rendered)
+    register_scc    = ""
+#    packages        = join("\n", formatlist("  - %s", var.packages))
+    packages        = ""
+    username        = var.username
+    password        = var.password
+  }
+
+}
+
+resource "libvirt_cloudinit_disk" "global_worker" {
+  # needed when 0 global_worker nodes are defined
+#  count = var.global_worker_count
+  name  = "${var.name_prefix}global_worker_cloud_init.iso"
+  pool  = var.pool
+  user_data = data.template_file.global_worker_cloud_init_user_data.rendered
+  network_config = file("global-cluster-cloud-init/network.cfg")
+}
+
+resource "libvirt_domain" "global_worker" {
+  name       = "${var.name_prefix}global_worker"
+  memory     = var.global_worker_memory
+  vcpu       = var.global_worker_vcpu
+  cloudinit  = libvirt_cloudinit_disk.global_worker.id
+  metadata   = "global_worker.${var.domain_name},global_worker,${var.name_prefix}"
+
+#  provisioner "file" {
+#    source      = "files/dot_all_nodes"
+#    destination = "/home/sles/.all_nodes"
+#  }
+
+  # cpu {
+  #   mode = "host-passthrough"
+  # }
+
+  disk {
+    volume_id = libvirt_volume.global_worker.id
+  }
+
+  network_interface {
+  bridge = "br240"
+#    network_id     = libvirt_network.lan_network.id
+#    hostname       = "${var.name_prefix}global_worker"
+#    addresses      = [cidrhost(var.network, 256 + 100 + 2)]
+#    addresses      = ["172.16.240.240"]
+#    wait_for_lease = true
+  }
+
+  graphics {
+    type        = "vnc"
+    listen_type = "address"
+  }
+
+  connection {
+    type     = "ssh"
+    user     = "root"
+    password = "linux"
+  }
+}
+
+#output "admin" {
+#  value = [libvirt_domain.admin.network_interface.0.addresses.0]
+#}
+#output "global_worker" {
+#  value = [libvirt_domain.global_worker.network_interface.0.addresses.0]
+#}

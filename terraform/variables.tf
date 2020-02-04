@@ -2,6 +2,16 @@
 # libvirt variables #
 #####################
 
+variable "libvirt_host_base" {
+  default     = "infra"
+  description = "Base name for KVM hosts on which to deploy a cluster"
+}
+
+variable "libvirt_host_number" {
+  default     = "2"
+  description = "Suffix to identify the KVM host on which to deploy a cluster"
+}
+
 variable "libvirt_host" {
   default     = "infra2"
   description = "KVM host on which to deploy a cluster"
@@ -89,6 +99,16 @@ variable "worker_vcpu" {
   description = "The amount of virtual CPUs for a worker"
 }
 
+variable "global_worker_memory" {
+  default     = 12288
+  description = "The amount of RAM for a worker"
+}
+
+variable "global_worker_vcpu" {
+  default     = 8
+  description = "The amount of virtual CPUs for a worker"
+}
+
 variable "name_prefix" {
 #  type        = string
   default     = "caasp-"
@@ -111,6 +131,17 @@ variable "network" {
 #  type        = string
   default     = "10.110.0.0/22"
   description = "Network used by the cluster"
+}
+
+variable "lan_network" {
+#  type        = string
+  default     = "172.16.240.0/24"
+  description = "Network used by the cluster"
+}
+
+variable "lan_net_base" {
+  default     = "10.110.1.102"
+  description = "First three octets of the network address"
 }
 
 variable "authorized_keys" {
