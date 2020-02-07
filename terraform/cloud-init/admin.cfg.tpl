@@ -61,18 +61,31 @@ write_files:
     encoding: b64
     permissions: "0644"
     content: c2V0IC1vIHZpCmFsaWFzIGtnbj0ia3ViZWN0bCBnZXQgbm9kZXMgLW8gd2lkZSIKYWxpYXMga2dkPSJrdWJlY3RsIGdldCBkZXBsb3ltZW50cyAtbyB3aWRlIgphbGlhcyBrZ3A9Imt1YmVjdGwgZ2V0IHBvZHMgLW8gd2lkZSIKYWxpYXMga2dwYT0ia3ViZWN0bCBnZXQgcG9kcyAtbyB3aWRlIC0tYWxsLW5hbWVzcGFjZXMiCmFsaWFzIGthZj0ia3ViZWN0bCBhcHBseSAtZiIK
+  - path: /etc/exports
+    encoding: b64
+    permissions: "0644"
+    content: L3B1YmxpYyAxMC4xMTAuMC4wLzIyKHJ3LG5vX3Jvb3Rfc3F1YXNoKQo=
+  - path: /etc/idmapd.conf
+    encoding: b64
+    permissions: "0644"
+    content: W0dlbmVyYWxdCgpWZXJib3NpdHkgPSAwClBpcGVmcy1EaXJlY3RvcnkgPSAvdmFyL2xpYi9uZnMvcnBjX3BpcGVmcwpEb21haW4gPSBjYWFzcC1zdXNlY29uLmxhYgoKW01hcHBpbmddCgpOb2JvZHktVXNlciA9IG5vYm9keQpOb2JvZHktR3JvdXAgPSBub2JvZHkK
 
 runcmd:
   # Since we are currently inside of the cloud-init systemd unit, trying to
   # start another service by either `enable --now` or `start` will create a
   # deadlock. Instead, we have to use the `--no-block-` flag.
-  - [ systemctl, enable, --now, --no-block, haproxy ]
+#  - [ systemctl, enable, --now, --no-block, haproxy ]
 ${register_scc}
 #  - [ zypper, in, --force-resolution, --no-confirm, --force, podman, kernel-default, cri-o, kubernetes-kubeadm,  kubernetes-client, skuba-update ]
 #  - [ reboot ]
   - SUSEConnect --url http://rmt.suse.hpc.local
   - SUSEConnect -p sle-module-containers/15.1/x86_64
   - SUSEConnect -p caasp/4.0/x86_64 --url http://rmt.suse.hpc.local
+  - zypper install --force-resolution --no-confirm --force kernel-default
+  - mkdir /public
+  - chmod 777 /public
+  - zypper --non-interactive install nfs-kernel-server
+  - sudo systemctl --now enable nfs-server
   - zypper --non-interactive install -t pattern SUSE-CaaSP-Management
   - zypper --non-interactive update
   - chown -R sles:users /home/sles
