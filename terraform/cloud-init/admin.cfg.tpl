@@ -84,7 +84,7 @@ ${register_scc}
   - zypper install --force-resolution --no-confirm --force kernel-default
   - mkdir /public
   - chmod 777 /public
-  - zypper --non-interactive install nfs-kernel-server
+  - zypper --non-interactive install nfs-kernel-server w3m
   - systemctl --now --no-block enable nfs-server
   - zypper --non-interactive install -t pattern SUSE-CaaSP-Management
   - zypper --non-interactive update
