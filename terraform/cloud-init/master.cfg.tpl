@@ -45,6 +45,7 @@ runcmd:
   - SUSEConnect --url http://rmt.suse.hpc.local
   - SUSEConnect -p sle-module-containers/15.1/x86_64
   - SUSEConnect -p caasp/4.0/x86_64 --url http://rmt.suse.hpc.local
+  - zypper --non-interactive install nfs-client
   - zypper --non-interactive update
 #  - reboot
 

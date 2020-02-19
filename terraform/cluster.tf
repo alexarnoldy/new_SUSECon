@@ -411,12 +411,7 @@ resource "libvirt_domain" "global_worker" {
   }
 
   network_interface {
-  bridge = "br240"
-#    network_id     = libvirt_network.lan_network.id
-#    hostname       = "${var.name_prefix}global_worker"
-#    addresses      = [cidrhost(var.network, 256 + 100 + 2)]
-#    addresses      = ["172.16.240.240"]
-#    wait_for_lease = true
+    bridge = var.lan_bridge
   }
 
   graphics {

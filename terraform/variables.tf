@@ -100,11 +100,15 @@ variable "worker_vcpu" {
 }
 
 variable "global_worker_memory" {
+## Set default to 1 to effectively disable the global workers
+#  default     = 1
   default     = 12288
   description = "The amount of RAM for a worker"
 }
 
 variable "global_worker_vcpu" {
+## Set default to 1 to effectively disable the global workers
+#  default     = 1
   default     = 8
   description = "The amount of virtual CPUs for a worker"
 }
@@ -137,6 +141,11 @@ variable "lan_network" {
 #  type        = string
   default     = "172.16.240.0/24"
   description = "Network used by the cluster"
+}
+
+variable "lan_bridge" {
+  default     = "br240"
+  description = "LAN attached bridge on the KVM host"
 }
 
 variable "lan_net_base" {

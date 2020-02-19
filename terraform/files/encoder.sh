@@ -9,3 +9,7 @@ echo "Encoded file will be placed in the same location."
 #echo ""
 
 bash -c "cat ${INPUT} | base64 | awk '{print}' ORS='' && echo"  >   ${INPUT}.b64
+
+echo""
+sleep 3
+echo "Don't forget to copy the encoded content into the appropriate clout-init file(s)"

@@ -31,6 +31,27 @@ terraform apply -state=state/infra4.tfstate -var libvirt_uri="qemu+ssh://admin@i
 ** Also need a programatic way to rollback one or all environments
 
 
+==== NFS storage class
+* From: https://documentation.suse.com/suse-caasp/4.1/single-html/caasp-admin/#helm_tiller_install
+
+----
+you only need to run the following command from the location where you normally run skuba commands:
+
+sudo zypper install helm
+
+This will install Tiller without additional certificate security.
+
+kubectl create serviceaccount --namespace kube-system tiller
+
+kubectl create clusterrolebinding tiller \
+    --clusterrole=cluster-admin \
+    --serviceaccount=kube-system:tiller
+
+helm init \
+    --tiller-image registry.suse.com/caasp/v4/helm-tiller:2.16.1 \
+    --service-account tiller
+
+----
 
 
 
