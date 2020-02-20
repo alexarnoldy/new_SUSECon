@@ -104,6 +104,7 @@ data "template_file" "admin_cloud_init_user_data" {
     packages        = ""
     username        = var.username
     password        = var.password
+    rmt_server_url  = var.rmt_server_url
   }
 
 }
@@ -197,6 +198,7 @@ data "template_file" "master_cloud_init_user_data" {
     packages        = ""
     username        = var.username
     password        = var.password
+    rmt_server_url  = var.rmt_server_url
   }
 
 #  depends_on = [libvirt_domain.admin]
@@ -282,6 +284,7 @@ data "template_file" "worker_cloud_init_user_data" {
     packages        = ""
     username        = var.username
     password        = var.password
+    rmt_server_url  = var.rmt_server_url
   }
 
 #  depends_on = [libvirt_domain.admin]
@@ -377,6 +380,7 @@ data "template_file" "global_worker_cloud_init_user_data" {
     packages        = ""
     username        = var.username
     password        = var.password
+    rmt_server_url  = var.rmt_server_url
   }
 
 }

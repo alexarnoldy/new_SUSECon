@@ -78,9 +78,11 @@ runcmd:
 ${register_scc}
 #  - [ zypper, in, --force-resolution, --no-confirm, --force, podman, kernel-default, cri-o, kubernetes-kubeadm,  kubernetes-client, skuba-update ]
 #  - [ reboot ]
-  - SUSEConnect --url http://rmt.suse.hpc.local
+  - SUSEConnect --url ${rmt_server_url}
+#  - SUSEConnect --url http://rmt.suse.hpc.local
   - SUSEConnect -p sle-module-containers/15.1/x86_64
-  - SUSEConnect -p caasp/4.0/x86_64 --url http://rmt.suse.hpc.local
+  - SUSEConnect -p caasp/4.0/x86_64 --url ${rmt_server_url}
+#  - SUSEConnect -p caasp/4.0/x86_64 --url http://rmt.suse.hpc.local
   - zypper install --force-resolution --no-confirm --force kernel-default
   - mkdir /public
   - chmod 777 /public

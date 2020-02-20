@@ -27,6 +27,11 @@ variable "pool" {
   description = "pool to be used to store all the volumes"
 }
 
+variable "rmt_server_url" {
+  default     = "http://rmt.suse.hpc.local"
+  description = "RMT server with http or https connection"
+}
+
 #####################
 # Cluster variables #
 #####################
