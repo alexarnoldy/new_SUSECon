@@ -56,7 +56,7 @@ write_files:
   - path: /tmp/deploy_caasp.sh
     encoding: gz+b64
     permissions: "0744"
-    content: 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
+    content: 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
   - path: /home/sles/.bashrc
     encoding: b64
     permissions: "0644"
@@ -78,22 +78,22 @@ runcmd:
 ${register_scc}
 #  - [ zypper, in, --force-resolution, --no-confirm, --force, podman, kernel-default, cri-o, kubernetes-kubeadm,  kubernetes-client, skuba-update ]
 #  - [ reboot ]
-  - SUSEConnect --url ${rmt_server_url}
-#  - SUSEConnect --url http://rmt.suse.hpc.local
-  - SUSEConnect -p sle-module-containers/15.1/x86_64
-  - SUSEConnect -p caasp/4.0/x86_64 --url ${rmt_server_url}
-#  - SUSEConnect -p caasp/4.0/x86_64 --url http://rmt.suse.hpc.local
-  - zypper install --force-resolution --no-confirm --force kernel-default
+#  - SUSEConnect --url ${rmt_server_url}
+##  - SUSEConnect --url http://rmt.suse.hpc.local
+#  - SUSEConnect -p sle-module-containers/15.1/x86_64
+#  - SUSEConnect -p caasp/4.0/x86_64 --url ${rmt_server_url}
+##  - SUSEConnect -p caasp/4.0/x86_64 --url http://rmt.suse.hpc.local
+#  - zypper install --force-resolution --no-confirm --force kernel-default
   - mkdir /public
   - chmod 777 /public
-  - zypper --non-interactive install nfs-kernel-server w3m
+#  - zypper --non-interactive install nfs-kernel-server w3m
   - systemctl --now --no-block enable nfs-server
-  - zypper --non-interactive install -t pattern SUSE-CaaSP-Management
-  - zypper --non-interactive update
+#  - zypper --non-interactive install -t pattern SUSE-CaaSP-Management
+#  - zypper --non-interactive update
   - chown -R sles:users /home/sles
 #  - sleep 180
   - sudo -H -u sles bash /tmp/deploy_caasp.sh
-  - sleep 120
+#  - sleep 120
   - reboot
 
 bootcmd:

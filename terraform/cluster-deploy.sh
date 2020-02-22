@@ -14,7 +14,7 @@ ACTION="apply -auto-approve"
 ###
 
 DEPLOYorDESTROY="$(basename $0)"
-[ $DEPLOYorDESTROY = cluster-destroy.sh ] && ACTION="destroy"
+[ $DEPLOYorDESTROY = cluster-destroy.sh ] && ACTION="destroy -auto-approve"
 
 echo ""
 echo "***IMPORTANT*** This script does not know the number of hosts you have"
@@ -51,7 +51,7 @@ case $HOSTS in
 			## Update the IP address for the node to 240 + the KVM host "libvirt_host_number" and create the new network-*.cfg file
 			IPADDR=$(echo $((240+${EACH})))
 			sed "s/XYZ/${IPADDR}/" global-cluster-cloud-init/network.cfg > global-cluster-cloud-init/network-${EACH}.cfg
-			cd ${TF_DIR}; terraform ${ACTION} -state=${STATE_DIR}/${QEMU_HOST_PREFIX}${EACH}.tfstate -var libvirt_host_number=${EACH}
+			cd ${TF_DIR}; terraform ${ACTION} -state=${STATE_DIR}/${QEMU_HOST_PREFIX}${EACH}.tfstate -var libvirt_host_number=${EACH}&
 		done
 		'
 		;;
@@ -62,7 +62,7 @@ case $HOSTS in
 			## Update the IP address for the node to 240 + the KVM host "libvirt_host_number" and create the new network-*.cfg file
 			IPADDR=$(echo $((240+${EACH})))
 			sed "s/XYZ/${IPADDR}/" global-cluster-cloud-init/network.cfg > global-cluster-cloud-init/network-${EACH}.cfg
-			cd ${TF_DIR}; terraform ${ACTION} -state=${STATE_DIR}/${QEMU_HOST_PREFIX}${EACH}.tfstate -var libvirt_host_number=${EACH}
+			cd ${TF_DIR}; terraform ${ACTION} -state=${STATE_DIR}/${QEMU_HOST_PREFIX}${EACH}.tfstate -var libvirt_host_number=${EACH}&
 		done
 		;;
 esac

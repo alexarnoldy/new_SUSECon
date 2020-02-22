@@ -39,9 +39,8 @@ variable "rmt_server_url" {
 ## fixme: see issue https://github.com/SUSE/avant-garde/issues/91
 variable "img_source_url" {
 #  type    = string
-#  default = "SLES15-SP1-JeOS.x86_64-15.1-OpenStack-Cloud-GMC3.qcow2"
-#  default = "SLES15-SP1-JeOS.x86_64-15.1-OpenStack-Cloud-GM.qcow2"
-  default = "SLES15-SP1-JeOS.x86_64-15.1-OpenStack-Cloud-QU2.qcow2"
+#  default = "SLES15-SP1-JeOS.x86_64-15.1-OpenStack-Cloud-QU2.qcow2"
+  default = "SLES15-SP1-JeOS.x86_64-15.1-OpenStack-Cloud-QU2-updated.qcow2"
 }
 
 variable "repositories" {
