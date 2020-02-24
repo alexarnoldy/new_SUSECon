@@ -1,3 +1,33 @@
+=== Requirements:
+
+* At least one KVM host with enough memory and CPU capacity to support the deployed cluster nodes
+* Each KVM host must have a linux bridge that has access to a LAN
+** The LAN can be non-routable, if so desired
+* An RMT server, with the CaaSP registration code and mirrored repositories, that is accessible from each KVM server
+* Each KVM host should have access the Internet or a local container and Helm registry server
+
+=== Operation:
+
+IMPORTANT: This methodology requires that the KVM servers have a specific naming convention. It requires that they all have the same prefix, i.e. "infra" and then use a numbered suffix, ideally in sequential order. The testing environment this project was developed on had four KVM hosts named infra1, infra2, infra3, infra4. There is a small amount of flexibility in the naming scheme but any deviation from this scheme requires altering the variables.tf file to match.
+
+IMPORTANT: This project is based on the SLES JeOS OpenStack Cloud image, from https://download.suse.com/index.jsp, which has cloud init pre-configured and ready for first boot.
+
+* Download the latest SLES JeOS OpenStack qcow2 image into the terraform subdirectory (below where this README exists)
+** If possible, choose the most recent QU* (Quarterly Update) version of the image
+* Update the terraform/variables.tf file to suit your environment
+** Depending on how closely your KVM hosts match the expected naming convention, the minimum changes to the variables.tf file that are required might be the number of master nodes, worker nodes, and the amount of CPU and memory resources allocated to each node.
+
+TIP: Review the cloud init files in the cloud-init and global-cluster-cloud-init subdirectories to ensure they are performing the actions you are expecting. Some of the registration and software install/update functions may be commented out to speed deployment (which requires that the qcow2 image be registered/updated/configured ahead of time.) When in doubt, cloud init performs most actions in an idempotent way and can be used to ensure registration and/or software manipulation.
+
+* Use the cluster-deploy.sh script in the terraform subdirectory to deploy fully functioning CaaSP clusters to KVM hosts, one cluster per host
+** The script gives guidance on how to specify which KVM hosts to target
+** An additional global cluster worker node is automatically deployed on each targeted host
+*** Specifying 1 megabyte of memory for the global cluster worker nodes will effectively disable them
+* Use the cluster-destroy.sh script in the same way to fully remove clusters from targeted hosts
+* After a minimum of two global cluster worker nodes have been deployed they can be used to form a CaaSP cluster with one cluster node per KVM host
+** The global cluster nodes can be used as worker nodes, master nodes, or even an admin node
+** The minimum viable CaaSP cluster includes one admin node (which can be shared with other CaaSP clusters), one master node, and two worker nodes
+
 === Todo:
 
 * *DONE* Create key pair for the admin node to use in the deployment
