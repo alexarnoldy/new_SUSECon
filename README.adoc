@@ -42,6 +42,60 @@ TIP: Review the cloud init files in the cloud-init and global-cluster-cloud-init
 
 * *DONE* Remove load balancer
 
+* Notes from adding local container registry as default registry:
+
+* Install docker registry on admin node, from: https://documentation.suse.com/sles/15-SP1/single-html/SLES-dockerquick/#sec-docker-registry-definition
+
+----
+sudo SUSEConnect --product PackageHub/15.1/x86_64
+
+sudo zypper refresh
+
+sudo zypper install docker-distribution-registry
+sudo systemctl enable registry
+sudo systemctl start registry
+----
+
+** Registry will be available at caasp-admin:5000
+
+* Install podman: `sudo zypper -n install podman`
+
+* Update /etc/containers/registries.conf with:
+
+----
+[registries.insecure]
+registries = ["caasp-admin:5000"]
+----
+
+* Pull all needed container images from external registry
+** To find the container images needed for pods that are currently running on the base CaaSP cluser (repeat for all nodes in the cluster to see images needed for all running containers):
+----
+for EACH in $(kgpa | grep master-0 | awk '{print$2}'); do kubectl describe pod -n kube-system $EACH | grep Image | grep -v sha256 >> /tmp/images; done
+for EACH in $(kgpa | grep worker-0 | awk '{print$2}'); do kubectl describe pod -n kube-system $EACH | grep Image | grep -v sha256 >> /tmp/images; done
+for EACH in $(awk '{print$2}' /tmp/images | sort | uniq); do sudo podman pull $EACH; done
+----
+
+* Retag and push all images to admin local registry
+
+----
+for EACH in $(sudo podman images | grep suse  | grep caasp | grep -v REPOSITORY | awk '{print$1":"$2}'); do LOCAL=$(echo $EACH | awk -F/ '{print$4}'); sudo podman tag $EACH caasp-admin:5000/$LOCAL; sudo podman push caasp-admin:5000/$LOCAL; done
+----
+
+** Images that were running on the base CaaSP cluster at the time of this writing were:
+----
+registry.suse.com/caasp/v4/helm-tiller:2.16.1
+registry.suse.com/caasp/v4/kured:1.2.0-rev4
+registry.suse.com/caasp/v4/etcd:3.3.15
+registry.suse.com/caasp/v4/hyperkube:v1.16.2
+registry.suse.com/caasp/v4/coredns:1.6.2
+registry.suse.com/caasp/v4/gangway:3.1.0-rev4
+registry.suse.com/caasp/v4/cilium:1.5.3
+registry.suse.com/caasp/v4/cilium-operator:1.5.3
+registry.suse.com/caasp/v4/cilium-init:1.5.3
+registry.suse.com/caasp/v4/caasp-dex:2.16.0
+----
+
+////
 * Test deploying onto multiple KVM hosts
 ** Run ssh-agent and ensure you have passwordless ssh and sudo on the target host
 ----
@@ -59,6 +113,7 @@ terraform apply -state=state/infra4.tfstate -var libvirt_uri="qemu+ssh://admin@i
 
 * Need to work out a way to snapshot all environments after they've been deployed
 ** Also need a programatic way to rollback one or all environments
+////
 
 
 ==== NFS storage class
