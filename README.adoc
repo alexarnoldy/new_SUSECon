@@ -95,6 +95,11 @@ registry.suse.com/caasp/v4/cilium-init:1.5.3
 registry.suse.com/caasp/v4/caasp-dex:2.16.0
 ----
 
+*** In addition, the nfs-client-provisioner was running in the default namespace:
+----
+quay.io/external_storage/nfs-client-provisioner:v3.1.0-k8s1.11
+----
+
 ////
 * Test deploying onto multiple KVM hosts
 ** Run ssh-agent and ensure you have passwordless ssh and sudo on the target host
