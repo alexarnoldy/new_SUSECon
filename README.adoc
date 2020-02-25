@@ -100,6 +100,26 @@ registry.suse.com/caasp/v4/caasp-dex:2.16.0
 quay.io/external_storage/nfs-client-provisioner:v3.1.0-k8s1.11
 ----
 
+* Update /etc/containers/registries.conf with:
+
+** Comment out: `registries = ["docker.io"]`
+** Add:
+----
+[registries.search]
+registries = ["caasp-admin:5000"]
+----
+
+=== Populating a registry while the qcow2 image is mounted to a running VM or host
+
+* Install podman on the VM or host Update Platform
+* Install the docker registry on the Update Platform
+* Install the docker registry into the qcow2 and create the `/etc/systemd/system/multi-user.target.wants/registry.service → /usr/lib/systemd/system/registry.service` symlink in the qcow2 image
+* Update the docker registry `/etc/registry/config.yml` config file on the Update Platform:
+** Change `rootdirectory:` to point to `/var/lib/docker-registry` on the qcow2 image
+* Restart the docker registry: `sudo systemctl start registry`
+* Use the sections above to pull the `registry.suse.com/caasp/v4/*` and `nfs-client-provisioner` images, then push them to the local registry
+
+
 ////
 * Test deploying onto multiple KVM hosts
 ** Run ssh-agent and ensure you have passwordless ssh and sudo on the target host
