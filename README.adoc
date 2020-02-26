@@ -89,7 +89,9 @@ registry.suse.com/caasp/v4/cilium:1.5.3
 registry.suse.com/caasp/v4/cilium-operator:1.5.3
 registry.suse.com/caasp/v4/cilium-init:1.5.3
 registry.suse.com/caasp/v4/caasp-dex:2.16.0
+registry.suse.com/caasp/v4/pause:3.1
 ----
+*** NOTE: The pause container doesn't show up, but is needed
 
 *** In addition, the nfs-client-provisioner was running in the default namespace:
 ----
@@ -111,11 +113,15 @@ export HOSTNAME=$(hostname)
 export MOUNTPOINT=/mnt/
 ## The container images have to be pushed into the location they identify as the registry in their manifests
 export REGISTRY=registry.suse.com
+mkdir -p ${MOUNTPOINT}/var/lib/docker-registry/docker/registry/v2/repositories/${REGISTRY}
+
 for EACH in $(sudo podman images | grep suse  | grep caasp | grep -v REPOSITORY | awk '{print$1":"$2}'); do LOCAL=$(echo $EACH | awk -F/ '{print $(NF)}'); sudo podman tag $EACH ${HOSTNAME}:5000/${REGISTRY}/$LOCAL; sudo podman push ${HOSTNAME}:5000/${REGISTRY}/$LOCAL; done
 
 ## This is for the nfs-client-provisioner, which has a manifest that identifies the registry as quay.io/external_storage/
 export MOUNTPOINT=/mnt/
 export REGISTRY=quay.io/external_storage/
+mkdir -p ${MOUNTPOINT}/var/lib/docker-registry/docker/registry/v2/repositories/${REGISTRY}
+
 for EACH in $(sudo podman images | grep nfs-client-provisioner | grep -v REPOSITORY | awk '{print$1":"$2}'); do LOCAL=$(echo $EACH | awk -F/ '{print $(NF)}'); sudo podman tag $EACH ${HOSTNAME}:5000/${REGISTRY}/$LOCAL; sudo podman push ${HOSTNAME}:5000/${REGISTRY}/$LOCAL; done
 ----
 
