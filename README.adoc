@@ -68,7 +68,7 @@ registries = ["caasp-admin:5000"]
 ----
 
 * Pull all needed container images from external registry
-** To find the container images needed for pods that are currently running on the base CaaSP cluser (repeat for all nodes in the cluster to see images needed for all running containers):
+** To find the container images needed for pods that are currently running on the base CaaSP cluster (repeat for all nodes in the cluster to see images needed for all running containers):
 ----
 for EACH in $(kgpa | grep master-0 | awk '{print$2}'); do kubectl describe pod -n kube-system $EACH | grep Image | grep -v sha256 >> /tmp/images; done
 for EACH in $(kgpa | grep worker-0 | awk '{print$2}'); do kubectl describe pod -n kube-system $EACH | grep Image | grep -v sha256 >> /tmp/images; done
@@ -78,7 +78,9 @@ for EACH in $(awk '{print$2}' /tmp/images | sort | uniq); do sudo podman pull $E
 * Retag and push all images to admin local registry
 
 ----
-for EACH in $(sudo podman images | grep suse  | grep caasp | grep -v REPOSITORY | awk '{print$1":"$2}'); do LOCAL=$(echo $EACH | awk -F/ '{print$4}'); sudo podman tag $EACH caasp-admin:5000/$LOCAL; sudo podman push caasp-admin:5000/$LOCAL; done
+export HOSTNAME=$(hostname)
+for EACH in $(sudo podman images | grep suse  | grep caasp | grep -v REPOSITORY | awk '{print$1":"$2}'); do LOCAL=$(echo $EACH | awk -F/ '{print$4}'); sudo podman tag $EACH ${HOSTNAME}:5000/$LOCAL; sudo podman push ${HOSTNAME}:5000/$LOCAL; done
+for EACH in $(sudo podman images | grep nfs-client-provisioner | grep -v REPOSITORY | awk '{print$1":"$2}'); do LOCAL=$(echo $EACH | awk -F/ '{print$3}'); sudo podman tag $EACH ${HOSTNAME}:5000/$LOCAL; sudo podman push ${HOSTNAME}:5000/$LOCAL; done
 ----
 
 ** Images that were running on the base CaaSP cluster at the time of this writing were:
@@ -109,15 +111,53 @@ quay.io/external_storage/nfs-client-provisioner:v3.1.0-k8s1.11
 registries = ["caasp-admin:5000"]
 ----
 
-=== Populating a registry while the qcow2 image is mounted to a running VM or host
+=== Populating a registry while the qcow2 image is mounted to a running VM or host Update Platform
 
 * Install podman on the VM or host Update Platform
 * Install the docker registry on the Update Platform
-* Install the docker registry into the qcow2 and create the `/etc/systemd/system/multi-user.target.wants/registry.service → /usr/lib/systemd/system/registry.service` symlink in the qcow2 image
+* Install the docker registry into the qcow2 
+
+////
+* create the `/etc/systemd/system/multi-user.target.wants/registry.service → /usr/lib/systemd/system/registry.service` symlink in the qcow2 image:
+----
+cd etc/systemd/system/multi-user.target.wants/
+ln -s ../../../../usr/lib/systemd/system/registry.service registry.service
+----
+////
 * Update the docker registry `/etc/registry/config.yml` config file on the Update Platform:
 ** Change `rootdirectory:` to point to `/var/lib/docker-registry` on the qcow2 image
-* Restart the docker registry: `sudo systemctl start registry`
+** See if port 5000 is open: `sudo ss -npr --listening`
+* Update /etc/containers/registries.conf with:
+----
+[registries.insecure]
+registries = ["<hostname>:5000"]
+----
+** Replace <hostname> with the hostname of the Update Platform
+
+* Restart the docker registry: `sudo systemctl restart registry`
 * Use the sections above to pull the `registry.suse.com/caasp/v4/*` and `nfs-client-provisioner` images, then push them to the local registry
+* Verify the images are in the repository on the qcow2 images:
+----
+export MOUNTPOINT=""
+ls ${MOUNTPOINT}//var/lib/docker-registry/docker/registry/v2/repositories/
+----
+
+=== Updating the qcow2 image that is mounted to a running VM or host Update Platform to use the local registry (on the admin node)
+
+* Update /<mountpoint>/etc/containers/registries.conf with:
+
+** Comment out: `registries = ["docker.io"]`
+** Add:
+----
+[registries.search]
+registries = ["caasp-admin:5000"]
+----
+----
+[registries.insecure]
+registries = ["caasp-admin:5000"]
+----
+
+
 
 === Updating CaaSP nodes to use local registry
 
