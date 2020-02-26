@@ -42,7 +42,9 @@ TIP: Review the cloud init files in the cloud-init and global-cluster-cloud-init
 
 * *DONE* Remove load balancer
 
-* Notes from adding local container registry as default registry:
+== Creating and populating a local container registry, which is mounted as a separate partition
+
+NOTE: The first part of the procedure can be used for most situations, while the second part is specific to populating a registry that exists on a qcow2 image that has been mounted to this VM or host.
 
 * Install docker registry on admin node, from: https://documentation.suse.com/sles/15-SP1/single-html/SLES-dockerquick/#sec-docker-registry-definition
 
@@ -56,31 +58,23 @@ sudo systemctl enable registry
 sudo systemctl start registry
 ----
 
-** Registry will be available at caasp-admin:5000
+** Registry will be available at $(hostname):5000
 
 * Install podman: `sudo zypper -n install podman`
 
 * Update /etc/containers/registries.conf with:
-
+** Comment out all existing entries (which are in a v1 format)
+** Add these entries:
 ----
 [registries.insecure]
 registries = ["caasp-admin:5000"]
 ----
 
-* Pull all needed container images from external registry
-** To find the container images needed for pods that are currently running on the base CaaSP cluster (repeat for all nodes in the cluster to see images needed for all running containers):
+* Pull all needed container images from external registries
+** The container images needed for pods that are currently running on the base CaaSP cluster (repeat for all nodes in the cluster to see images needed for all running containers) can be found with these loops:
 ----
 for EACH in $(kgpa | grep master-0 | awk '{print$2}'); do kubectl describe pod -n kube-system $EACH | grep Image | grep -v sha256 >> /tmp/images; done
 for EACH in $(kgpa | grep worker-0 | awk '{print$2}'); do kubectl describe pod -n kube-system $EACH | grep Image | grep -v sha256 >> /tmp/images; done
-for EACH in $(awk '{print$2}' /tmp/images | sort | uniq); do sudo podman pull $EACH; done
-----
-
-* Retag and push all images to admin local registry
-
-----
-export HOSTNAME=$(hostname)
-for EACH in $(sudo podman images | grep suse  | grep caasp | grep -v REPOSITORY | awk '{print$1":"$2}'); do LOCAL=$(echo $EACH | awk -F/ '{print$4}'); sudo podman tag $EACH ${HOSTNAME}:5000/$LOCAL; sudo podman push ${HOSTNAME}:5000/$LOCAL; done
-for EACH in $(sudo podman images | grep nfs-client-provisioner | grep -v REPOSITORY | awk '{print$1":"$2}'); do LOCAL=$(echo $EACH | awk -F/ '{print$3}'); sudo podman tag $EACH ${HOSTNAME}:5000/$LOCAL; sudo podman push ${HOSTNAME}:5000/$LOCAL; done
 ----
 
 ** Images that were running on the base CaaSP cluster at the time of this writing were:
@@ -102,6 +96,30 @@ registry.suse.com/caasp/v4/caasp-dex:2.16.0
 quay.io/external_storage/nfs-client-provisioner:v3.1.0-k8s1.11
 ----
 
+* Once the list of containers is established, pull them down to this VM or host:
+----
+for EACH in $(awk '{print$2}' /tmp/images | sort | uniq); do sudo podman pull $EACH; done
+----
+
+* Update the docker registry `/etc/registry/config.yml` config file on the Update Platform:
+** Change `rootdirectory:` to point to `/var/lib/docker-registry` at the qcow2 image mount point
+
+* Retag and push all images to admin local registry
+
+----
+export HOSTNAME=$(hostname)
+export MOUNTPOINT=/mnt/
+## The container images have to be pushed into the location they identify as the registry in their manifests
+export REGISTRY=registry.suse.com
+for EACH in $(sudo podman images | grep suse  | grep caasp | grep -v REPOSITORY | awk '{print$1":"$2}'); do LOCAL=$(echo $EACH | awk -F/ '{print $(NF)}'); sudo podman tag $EACH ${HOSTNAME}:5000/${REGISTRY}/$LOCAL; sudo podman push ${HOSTNAME}:5000/${REGISTRY}/$LOCAL; done
+
+## This is for the nfs-client-provisioner, which has a manifest that identifies the registry as quay.io/external_storage/
+export MOUNTPOINT=/mnt/
+export REGISTRY=quay.io/external_storage/
+for EACH in $(sudo podman images | grep nfs-client-provisioner | grep -v REPOSITORY | awk '{print$1":"$2}'); do LOCAL=$(echo $EACH | awk -F/ '{print $(NF)}'); sudo podman tag $EACH ${HOSTNAME}:5000/${REGISTRY}/$LOCAL; sudo podman push ${HOSTNAME}:5000/${REGISTRY}/$LOCAL; done
+----
+
+
 * Update /etc/containers/registries.conf with:
 
 ** Comment out: `registries = ["docker.io"]`
@@ -111,7 +129,7 @@ quay.io/external_storage/nfs-client-provisioner:v3.1.0-k8s1.11
 registries = ["caasp-admin:5000"]
 ----
 
-=== Populating a registry while the qcow2 image is mounted to a running VM or host Update Platform
+==== Populating a registry while the qcow2 image is mounted to a running VM or host Update Platform
 
 * Install podman on the VM or host Update Platform
 * Install the docker registry on the Update Platform
@@ -141,20 +159,27 @@ registries = ["<hostname>:5000"]
 export MOUNTPOINT=""
 ls ${MOUNTPOINT}//var/lib/docker-registry/docker/registry/v2/repositories/
 ----
+* 
 
-=== Updating the qcow2 image that is mounted to a running VM or host Update Platform to use the local registry (on the admin node)
+==== Updating the qcow2 image that is mounted to a running VM or host Update Platform to use the local registry (on the admin node)
 
-* Update /<mountpoint>/etc/containers/registries.conf with:
+* Update /${MOUNTPOINT}/etc/containers/registries.conf with:
 
-** Comment out: `registries = ["docker.io"]`
-** Add:
+** Comment out all existing entries (which are in a v1 format)
+** Add these entries:
+
 ----
-[registries.search]
-registries = ["caasp-admin:5000"]
-----
-----
-[registries.insecure]
-registries = ["caasp-admin:5000"]
+[[registry]]
+blocked = false
+insecure = true
+prefix = "registry.suse.com"
+location = "caasp-admin:5000/registry.suse.com"
+
+[[registry]]
+blocked = false
+insecure = true
+prefix = "quay.io"
+location = "caasp-admin:5000/quay.io"
 ----
 
 
