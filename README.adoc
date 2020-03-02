@@ -42,7 +42,7 @@ TIP: Review the cloud init files in the cloud-init and global-cluster-cloud-init
 
 * *DONE* Remove load balancer
 
-== Creating and populating a local container registry, which is mounted as a separate partition
+== Creating and populating a local container registry, which may be mounted as a separate partition
 
 NOTE: The first part of the procedure can be used for most situations, while the second part is specific to populating a registry that exists on a qcow2 image that has been mounted to this VM or host.
 
@@ -56,6 +56,15 @@ sudo zypper refresh
 sudo zypper install docker-distribution-registry
 sudo systemctl enable registry
 sudo systemctl start registry
+----
+
+* If the local registry is in a qcow2 image mounted to this Update Host, install the registry software into that location:
+
+----
+export MOUNTPOINT=/mnt/
+sudo SUSEConnect --root ${MOUNTPOINT} --product PackageHub/15.1/x86_64
+sudo zypper --root ${MOUNTPOINT} refresh
+sudo zypper --root ${MOUNTPOINT} install docker-distribution-registry
 ----
 
 ** Registry will be available at $(hostname):5000
@@ -119,13 +128,13 @@ for EACH in $(sudo podman images | grep suse  | grep caasp | grep -v REPOSITORY 
 
 ## This is for the nfs-client-provisioner, which has a manifest that identifies the registry as quay.io/external_storage/
 export MOUNTPOINT=/mnt/
-export REGISTRY=quay.io/external_storage/
+export REGISTRY=quay.io/external_storage
 mkdir -p ${MOUNTPOINT}/var/lib/docker-registry/docker/registry/v2/repositories/${REGISTRY}
 
 for EACH in $(sudo podman images | grep nfs-client-provisioner | grep -v REPOSITORY | awk '{print$1":"$2}'); do LOCAL=$(echo $EACH | awk -F/ '{print $(NF)}'); sudo podman tag $EACH ${HOSTNAME}:5000/${REGISTRY}/$LOCAL; sudo podman push ${HOSTNAME}:5000/${REGISTRY}/$LOCAL; done
 ----
 
-
+////
 * Update /etc/containers/registries.conf with:
 
 ** Comment out: `registries = ["docker.io"]`
@@ -140,6 +149,7 @@ registries = ["caasp-admin:5000"]
 * Install podman on the VM or host Update Platform
 * Install the docker registry on the Update Platform
 * Install the docker registry into the qcow2 
+////
 
 ////
 * create the `/etc/systemd/system/multi-user.target.wants/registry.service → /usr/lib/systemd/system/registry.service` symlink in the qcow2 image:
@@ -147,7 +157,6 @@ registries = ["caasp-admin:5000"]
 cd etc/systemd/system/multi-user.target.wants/
 ln -s ../../../../usr/lib/systemd/system/registry.service registry.service
 ----
-////
 * Update the docker registry `/etc/registry/config.yml` config file on the Update Platform:
 ** Change `rootdirectory:` to point to `/var/lib/docker-registry` on the qcow2 image
 ** See if port 5000 is open: `sudo ss -npr --listening`
@@ -160,6 +169,7 @@ registries = ["<hostname>:5000"]
 
 * Restart the docker registry: `sudo systemctl restart registry`
 * Use the sections above to pull the `registry.suse.com/caasp/v4/*` and `nfs-client-provisioner` images, then push them to the local registry
+////
 * Verify the images are in the repository on the qcow2 images:
 ----
 export MOUNTPOINT=""
@@ -189,13 +199,13 @@ location = "caasp-admin:5000/quay.io"
 ----
 
 
-
+////
 === Updating CaaSP nodes to use local registry
 
 * Can try to set up the /etc/containers/registries.conf file in the image
 * Should also put it in the files directory and add a comment in the cloud-init files about adding it, if needed
 * Need to see if it exists after installing the CaaSP Node pattern
-
+////
 ////
 * Test deploying onto multiple KVM hosts
 ** Run ssh-agent and ensure you have passwordless ssh and sudo on the target host

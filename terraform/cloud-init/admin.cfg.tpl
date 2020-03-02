@@ -92,6 +92,7 @@ ${register_scc}
   - chmod 777 /public
 #  - zypper --non-interactive install nfs-kernel-server w3m
   - systemctl --now --no-block enable nfs-server
+  - systemctl --now --no-block enable registry
 #  - zypper --non-interactive install -t pattern SUSE-CaaSP-Management
 #  - zypper --non-interactive update
   - chown -R sles:users /home/sles
