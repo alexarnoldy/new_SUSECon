@@ -64,6 +64,7 @@ sudo systemctl start registry
 export MOUNTPOINT=/mnt/
 sudo SUSEConnect --root ${MOUNTPOINT} --product PackageHub/15.1/x86_64
 sudo zypper --root ${MOUNTPOINT} refresh
+
 sudo zypper --root ${MOUNTPOINT} install docker-distribution-registry
 ----
 
@@ -80,6 +81,28 @@ registries = ["caasp-admin:5000"]
 ----
 
 * Pull all needed container images from external registries
+** Gather the container images needed for the CaaSP cluster:
+----
+export K8S_VERSION=""
+skuba cluster images | grep "$K8S_VERSION" | awk '{print$2}' | sort
+----
+
+* At the time of writing, version K8s version 1.16.2 required these packages
+----
+registry.suse.com/caasp/v4/caasp-dex:2.16.0
+registry.suse.com/caasp/v4/cilium:1.5.3
+registry.suse.com/caasp/v4/cilium-init:1.5.3
+registry.suse.com/caasp/v4/cilium-operator:1.5.3
+registry.suse.com/caasp/v4/coredns:1.6.2
+registry.suse.com/caasp/v4/etcd:3.3.15
+registry.suse.com/caasp/v4/gangway:3.1.0-rev4
+registry.suse.com/caasp/v4/hyperkube:v1.16.2
+registry.suse.com/caasp/v4/kured:1.2.0-rev4
+registry.suse.com/caasp/v4/pause:3.1
+registry.suse.com/caasp/v4/skuba-tooling:0.1.0
+----
+
+////
 ** The container images needed for pods that are currently running on the base CaaSP cluster (repeat for all nodes in the cluster to see images needed for all running containers) can be found with these loops:
 ----
 for EACH in $(kgpa | grep master-0 | awk '{print$2}'); do kubectl describe pod -n kube-system $EACH | grep Image | grep -v sha256 >> /tmp/images; done
@@ -101,6 +124,8 @@ registry.suse.com/caasp/v4/caasp-dex:2.16.0
 registry.suse.com/caasp/v4/pause:3.1
 ----
 *** NOTE: The pause container doesn't show up, but is needed
+
+////
 
 *** In addition, the nfs-client-provisioner was running in the default namespace:
 ----
@@ -202,7 +227,6 @@ location = "caasp-admin:5000/quay.io"
 ////
 === Updating CaaSP nodes to use local registry
 
-* Can try to set up the /etc/containers/registries.conf file in the image
 * Should also put it in the files directory and add a comment in the cloud-init files about adding it, if needed
 * Need to see if it exists after installing the CaaSP Node pattern
 ////
@@ -217,13 +241,11 @@ terraform apply -state=state/infra4.tfstate -var libvirt_uri="qemu+ssh://admin@i
 ----
 
 
-*  Love to be able to do nested deployments
 
 * Deploy a single deployment across multiple KVM hosts (providers)
 ** https://www.terraform.io/docs/configuration/providers.html#alias-multiple-provider-instances
 
 * Need to work out a way to snapshot all environments after they've been deployed
-** Also need a programatic way to rollback one or all environments
 ////
 
 
@@ -248,6 +270,26 @@ helm init \
     --service-account tiller
 
 ----
+
+==== Random notes from attempting air-gapped deployment
+* No success in redirecting container images to a local registry on the base image b/c skuba can't figure out the registry based on the manifest
+
+* No success in booting the JeOS cloud image as it seems to mess up networking
+** Running `cloud-init clean` then removing the .../udev/.../70... file reset eth1 back to eth0, but then RPC wouldn't work for the NFS server
+
+* Trying to install a new base image, configure it up, then add cloud-init
+** Used minimal install, left DHCP for eth0
+** Already has kernel-default
+** zypper -n install -t pattern SUSE-CaaSP-Management
+** zypper -n install -t pattern SUSE-CaaSP-Node
+** zypper -n install nfs-kernel-server
+*** `/public 10.110.0.0/22(rw,no_root_squash)` in /etc/exports
+** Powered down VM and made a copy of the qcow2
+** systemctl enable cloud-init cloud-init-local cloud-config cloud-final
+** rm /etc/machine-id /var/lib/zypp/AnonymousUniqueId \
+/var/lib/systemd/random-seed /var/lib/dbus/machine-id \
+/var/lib/wicked/*
+** Seem to need to do the clean and remove to keep eth0 from becoming eth1
 
 
 
