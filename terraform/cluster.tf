@@ -44,6 +44,10 @@ resource "libvirt_network" "network" {
   dns {
     enabled = true
   }
+#  hosts {
+#    hostname = "rmt.hol1289.local"
+#    ip = "172.16.240.164"
+#  }
 }
 
 #resource "libvirt_network" "lan_network" {

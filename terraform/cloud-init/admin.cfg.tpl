@@ -55,16 +55,16 @@ write_files:
     content: c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCQVFEVXJiUkU4UUJIU0h2dHk4WTRnL2lGdmVVbElIVEs0NTkwTllONHR4Q0JzdXA3eEVlZG56Y0dJU0NmYkkyTGN2d0dSdG1lRG5oSjNDeUE0ajJBODNuZVdOS290RDdTb1l0WVF6TFA5Um1ER2ZSTDErbExIZWJBT3ZUdDRKeEcxeEw4YXk1UWRzWFJNdm12QmNMWnRaVmZJQ1Q3NzZSOThYVWJOMk9YM0xEQ1l1c2c3VHdsZVIxVEJEQUFTenBFb3kxYkZ4ck83RXU2eDlmQmhFTGpZaWdaQXMvTk1rTnIvQlRyYkJ5eHk4Snd4eVRXclk2YUhickF1bFZXVURuQlF1bTA3UUYzVURxV2xnQWZlVU1ORFVmNkhldkdQbVdXRCtDVnUwVDZvN1FValA4aCtiRm1JVDdTcG9BZWt6aVBzZk1GMnhQaC9QVXF6UjAwZzhnNkFvaTcgc2xlc0BjYWFzcC1hZG1pbgo=
   - path: /tmp/deploy_caasp.sh
     encoding: gz+b64
-    permissions: "0744"
-    content: H4sICGz5Tl4AA2RlcGxveV9jYWFzcC5zaACdV21z28YR/kz8ig3IGUltAEhOJx/k0B1HpmLVjaSaSjOdukMfgaN4EXiHwQGkGUX57X328K7IjVLOWAZxu3u7z+4+uxx/ES2VjpbCrj1vjA/N41xlBSlLeCkTMppKq/QtCYqlLnKRkpUFmRXN52/pTu4tVYoXq1qwWEN5p4o13cg8FyuTbyiRWWr2MBenpS1kTtok0n5JWuJdYWgj7iTZMpfQlpU9Z7pkF5Z7fksi2SjtFElAMDNZmYoC53jL5wPTB/RrFFq7jkRZrE2ufpbJwllcqVR+1mHxlMvdvZ2/kNiJPHH3OrN4N/SR4YQ1W/CRlZLUioTeN15aWoutpKWUGv6rQomUfaRVbjaVQz1TMl4b8m9gf2XS1OzY6bgKNlG5jAsEKBGCzFmi1Mmp79kygZtKJxRRoMUGfpZLCaPBT0bpMDZ6FSb04lWUyG2kyzSt8v/cjzemM5XHpSpomUtkL2dMEJRObGBWqxq+DUqGxn/MstyixiaHSF4gbqF/5LnHJGlSqpJFbsUAYKld8bQlyQUitkKlYpnKOmGbfpV4SMcX1BgOUvJGONX4rwKbLdVJRlZam9oUnd3Q90aIHer6hIKM/AtbpW5t4FWWm61KqvrqirPx8K90uI/0kU/vZv9avL2a33ijGP1Gk+Y7qsIbjfZH+FN5dPheHtlC5AWbbMGBC6M7lQKwe5hevP5udnmzuL5488B6DKTfR5Kl65jx9PIl/vypu2Gmmw58TgTINTAh3KGSzh/KS61ZBVYP10oXp1Tke2IXHYmgAxqJVueAYQP2LjqY1HIH2kECddJmqO8B334U4oLZJ+XQSEqX41TEd0xMjz3lPI0kZOuYpRXxyBuPZGpBBb9JoSgolQLxsw8w1/a4XZudJrE02woknFvHCC0nDEqsn+I5SLJL8JyTO3bZHTfgnxmNWEqHtoHVTwXwkBmTGxt+lAWfFRHL2CWwNfJ8QMY1Io2ZCpOV8lxbXdfcaqvgNeJecElU9FlxJZ+c/+PNZQPRgH654+nGcPpqZgVwqULFgCSAI/LMnPQlxUC/QKrJdTazkrolnjN7xyfOjhTxuuL93ZopzrVHBhYrOt51trlg+PDy9fezRwLsqeMRjj+GN8FbClbMKCJNF85netUQTC/gCo+LlqHr8mxYxE1MjMPX1xeL2eWb66uLy5v+lQ04qUGNLUUqdAyI/nlxzTjUZxvhcEOiXYHgrSCeS2l71HGpN+7fNK3Og+MwFsJmgcW4BIQh2MkbyE0Ob3PUUm1uEPQvtHb1f4IyOvv7D/Ob2fsF4zetjXmDl88xhCexu6PgPKSD+yxHFiYvHg6OPKbcf1OQkP9rNLnvm33w6T/kMQc09HtWFxPPwZQbdN+fkiHVhY7GdlXMdRtjPrwkiykn2lpkHQoChFHkJg0y4I8OHCRr0neEjQxfuPR/a0xhsfpkg0Jvu2ClcrBFjYmr01TZejHpQ+R9/9oZ5sJ4ZkoqDQg7WCY9A0+gfOJQrhBwbixbv4MA2UTnpTAfBG43CALQ7S1qd3LfM/vQfn1wof/N1NtVLjdCOd7uBdq2V78ffuRxZNUmS/dY3TJhbbuh/X59c9P3o4Tmx/8BVIFRDO7+84uPLwkxfWgA+/hMvKD2oY8Y70ZABsXSOvcEdB+8Drz+FfUXtplgOAwB3Jn87nOwcdQ/Xr1/95uoa6V+1E2klXwTaV/7D0da3/I7kfavqL8MIj2rqPzyfE5zbKQY7XSWIvveGBYRy1fHnvyUMfW/++Hb2dnV5fnFd9PJ/dsrEMBjQojc9uu2VI/31rhIm1EBF7cqxkyIselyd/MgsZmIqw03sHtAikGMKgSyj5RrwDlq/O6pdhsniEAIH3BFJzGtn4NqFW8khg5Me5ee1peuZbqpuKfRqQ4CtWFUcnkLfsj3IVMsYtxEjr6j7V8i1qyFT1+EJ1+HJ4+vDZrAHwUY6EH4O+GYD4U1BYgJ2NLoabcRs0cbacpi+tXxse01YFR7Wr1pUvf1sYcr0WquKHgP2lTgS1eMFWdz4tlJV+RYBJm1fT5HfdSIYMMDN1Qpo3rABHplefWDWxEekQAFPwK3fFp47QqTf3LiMKzsT0+OwxP+F54c9w4zUaynUVYuUxW3uOAltgdbFWTM9UjdLbzyHdz7G1mIRBTCP6V7X2h4Lxgv65/e+33NkI3mWmIxCpWJlAVMK1GmReCO/VO/yEvpPzw8HLiOeOeYsFlzvaf3dHwcfv9Pb9Art7Pwz/c89saxKL75ZnZ1PnzL8ASGtsobV2vS3a2e+g0+3NoVJ0FmpxLpd2LJUKyrkqeEs6FwZpInpcTnxZBKlEfXz7bTE6tOTWQ8WYIVThGr54W9YHl+P43a49UAFVeU1vssDJyX/wKqLCHnHhEAAA==
+    permissions: "0755"
+    content: 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
   - path: /root/recover_deployment.sh
     encoding: b64
-    permissions: "0744"
+    permissions: "0755"
     content: IyEvYmluL2Jhc2gKIyMgUnVuIGFzIHJvb3QgaWYgdGhlIGNsb3VkIGluaXQgc2NyaXB0cyBkb2Vzbid0IGZpbmlzaCBjb3JyZWN0bHkKY2hvd24gLVIgc2xlczp1c2VycyAvaG9tZS9zbGVzCnN1ZG8gLUggLXUgc2xlcyBiYXNoIC90bXAvZGVwbG95X2NhYXNwLnNoCg==
   - path: /home/sles/.bashrc
     encoding: b64
     permissions: "0644"
-    content: c2V0IC1vIHZpCmFsaWFzIGtnbj0ia3ViZWN0bCBnZXQgbm9kZXMgLW8gd2lkZSIKYWxpYXMga2dkPSJrdWJlY3RsIGdldCBkZXBsb3ltZW50cyAtbyB3aWRlIgphbGlhcyBrZ3A9Imt1YmVjdGwgZ2V0IHBvZHMgLW8gd2lkZSIKYWxpYXMga2dwYT0ia3ViZWN0bCBnZXQgcG9kcyAtbyB3aWRlIC0tYWxsLW5hbWVzcGFjZXMiCmFsaWFzIGthZj0ia3ViZWN0bCBhcHBseSAtZiIKYWxpYXMgc2NzPSJza3ViYSBjbHVzdGVyIHN0YXR1cyIK
+    content: c2V0IC1vIHZpCmFsaWFzIGtnbj0ia3ViZWN0bCBnZXQgbm9kZXMgLW8gd2lkZSIKYWxpYXMga2dkPSJrdWJlY3RsIGdldCBkZXBsb3ltZW50cyAtbyB3aWRlIgphbGlhcyBrZ3A9Imt1YmVjdGwgZ2V0IHBvZHMgLW8gd2lkZSIKYWxpYXMga2dwYT0ia3ViZWN0bCBnZXQgcG9kcyAtbyB3aWRlIC0tYWxsLW5hbWVzcGFjZXMgfCBsZXNzIiAKYWxpYXMga2c9Imt1YmVjdGwgZ2V0ICIKYWxpYXMga2FmPSJrdWJlY3RsIGFwcGx5IC1mIgphbGlhcyBrZGY9Imt1YmVjdGwgZGVsZXRlIC1mIgphbGlhcyBzY3M9InNrdWJhIGNsdXN0ZXIgc3RhdHVzIgo=
   - path: /etc/exports
     encoding: b64
     permissions: "0644"
@@ -77,28 +77,25 @@ write_files:
 runcmd:
   # Since we are currently inside of the cloud-init systemd unit, trying to
   # start another service by either `enable --now` or `start` will create a
-  # deadlock. Instead, we have to use the `--no-block-` flag.
-#  - [ systemctl, enable, --now, --no-block, haproxy ]
+  # deadlock. Instead, we have to use the `--no-block` flag.
 ${register_scc}
-#  - [ zypper, in, --force-resolution, --no-confirm, --force, podman, kernel-default, cri-o, kubernetes-kubeadm,  kubernetes-client, skuba-update ]
-#  - [ reboot ]
-#  - SUSEConnect --url ${rmt_server_url}
-##  - SUSEConnect --url http://rmt.suse.hpc.local
-#  - SUSEConnect -p sle-module-containers/15.1/x86_64
-#  - SUSEConnect -p caasp/4.0/x86_64 --url ${rmt_server_url}
-##  - SUSEConnect -p caasp/4.0/x86_64 --url http://rmt.suse.hpc.local
-#  - zypper install --force-resolution --no-confirm --force kernel-default
+  - SUSEConnect --cleanup
+  - SUSEConnect -d
+  - SUSEConnect --url ${rmt_server_url}
+#  - SUSEConnect --url http://rmt.suse.hpc.local
+  - SUSEConnect -p sle-module-containers/15.1/x86_64
+  - SUSEConnect -p caasp/4.0/x86_64 --url ${rmt_server_url}
+#  - SUSEConnect -p caasp/4.0/x86_64 --url http://rmt.suse.hpc.local
+  - zypper remove --force-resolution --no-confirm --force kernel-default-base
+  - zypper install --force-resolution --no-confirm --force kernel-default
   - mkdir /public
   - chmod 777 /public
-#  - zypper --non-interactive install nfs-kernel-server w3m
+  - zypper --non-interactive install nfs-kernel-server w3m
   - systemctl --now --no-block enable nfs-server
-  - systemctl --now --no-block enable registry
-#  - zypper --non-interactive install -t pattern SUSE-CaaSP-Management
-#  - zypper --non-interactive update
+  - zypper --non-interactive install -t pattern SUSE-CaaSP-Management
+  - zypper --non-interactive update
   - chown -R sles:users /home/sles
-#  - sleep 180
-  - sudo -H -u sles bash /tmp/deploy_caasp.sh
-#  - sleep 120
+  - cp -p /root/recover_deployment.sh /var/lib/cloud/scripts/per-boot/
   - reboot
 
 bootcmd:

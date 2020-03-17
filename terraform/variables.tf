@@ -28,7 +28,8 @@ variable "pool" {
 }
 
 variable "rmt_server_url" {
-  default     = "http://rmt.suse.hpc.local"
+  default     = "http://rmt.hol1289.local"
+#  default     = "http://rmt.suse.hpc.local"
   description = "RMT server with http or https connection"
 }
 
@@ -39,8 +40,9 @@ variable "rmt_server_url" {
 ## fixme: see issue https://github.com/SUSE/avant-garde/issues/91
 variable "img_source_url" {
 #  type    = string
-#  default = "SLES15-SP1-JeOS.x86_64-15.1-OpenStack-Cloud-QU2.qcow2"
-  default = "SLES15-SP1-JeOS.x86_64-15.1-OpenStack-Cloud-QU2-updated.qcow2"
+  default = "SLES15-SP1-JeOS.x86_64-15.1-OpenStack-Cloud-QU2.qcow2"
+#  default = "SLES15-SP1-JeOS.x86_64-15.1-OpenStack-Cloud-QU2-updated.qcow2"
+#  default = "SLES15-SP1-cloud-init-enabled.qcow2"
 }
 
 variable "repositories" {
